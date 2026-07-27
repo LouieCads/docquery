@@ -1,3 +1,9 @@
+# Allowlist for dependencies permitted to run postinstall/build scripts.
+# A new dep with a build script MUST be listed here or pnpm silently skips it.
 allowBuilds:
+  # Ships a prebuilt dist/; its `prepare` script only runs for git/local installs.
+  '@google/genai': false
   '@tailwindcss/oxide': true
   esbuild: true
+  # `postinstall` only does work when installed as a git dep / for the CLI. Pure JS.
+  protobufjs: false

@@ -17,7 +17,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@sveltejs/adapter-auto": "^7.0.1",
+		"@sveltejs/adapter-vercel": "^6.3.4",
 		"@sveltejs/kit": "^2.63.0",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
 		"@tailwindcss/forms": "^0.5.11",
@@ -41,5 +41,10 @@
 		"vite": "^8.0.16",
 		"vitest": "^4.1.8",
 		"vitest-browser-svelte": "^2.1.1"
+	},
+	"dependencies": {
+		"@google/genai": "^2.13.0",
+		"@supabase/supabase-js": "^2.110.8",
+		"unpdf": "^1.8.0"
 	}
 }

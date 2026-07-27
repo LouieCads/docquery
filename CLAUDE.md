@@ -22,9 +22,9 @@ Running a subset of tests. Pass flags directly — **no `--` separator**. pnpm f
 (`pnpm test:unit -- --run --project server` still launches the browser):
 
 ```sh
-pnpm test:unit --run src/lib/vitest-examples/greet.spec.ts   # one file
-pnpm test:unit --run -t "returns a greeting"                 # by test name
-pnpm test:unit --run --project server                        # one environment
+pnpm test:unit --run src/lib/server/chunking.spec.ts   # one file
+pnpm test:unit --run -t "splits on paragraph breaks"   # by test name
+pnpm test:unit --run --project server                  # one environment
 ```
 
 The `test` script in `package.json` does use `--`, but that is npm's convention and correct there.
@@ -65,8 +65,10 @@ real theme.
 rather than to a separate ESLint list. `no-undef` is deliberately off, per typescript-eslint
 guidance for TS projects.
 
-**`pnpm-workspace.yaml` allowlists native postinstall builds** (`@tailwindcss/oxide`, `esbuild`).
-A new dependency with a build script must be added there or pnpm silently skips its build.
+**`pnpm-workspace.yaml` allowlists postinstall builds.** A new dependency with a build script must
+be listed there or pnpm silently skips it (and prints `ERR_PNPM_IGNORED_BUILDS`). `@google/genai`
+and `protobufjs` are deliberately set to `false` — both ship a prebuilt `dist/` and their scripts
+only do work for git/local installs, verified by a runtime import check.
 
 Prettier settings are enforced by `pnpm lint`: tabs, single quotes, no trailing commas, 100-column
 width.
@@ -76,10 +78,16 @@ width.
 - `src/routes/` — SvelteKit file-based routes. `+layout.svelte` imports the global stylesheet and
   sets the favicon.
 - `src/lib/` — the `$lib` alias target.
-- `src/lib/server/` — does not exist yet, but the Vitest `client` project already excludes it;
-  that is the convention for server-only modules.
-- Deployment uses `@sveltejs/adapter-auto`. Swap in a target-specific adapter before deploying
-  anywhere adapter-auto does not detect.
+- `src/lib/server/` — server-only modules; the Vitest `client` project excludes it, and SvelteKit
+  refuses to bundle it into client code. Anything touching `SUPABASE_SERVICE_ROLE_KEY` or
+  `GEMINI_API_KEY` lives here.
+- Deployment uses `@sveltejs/adapter-vercel` pinned to the **Node** runtime
+  (`vite.config.ts:20`) — PDF parsing and the embedding loop need Node APIs and more wall-clock
+  time than an edge function allows. Note there is no `svelte.config.js` in this scaffold;
+  adapter and compiler options are passed inline to the `sveltekit()` Vite plugin.
 
-`src/lib/vitest-examples/` is scaffold sample code demonstrating both test environments. It is
-safe to delete once real tests exist.
+## Environment
+
+`.env` (gitignored) supplies `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, and `GEMINI_API_KEY`;
+`.env.example` documents them and is committed. Read them via `$env/static/private` — never
+`PUBLIC_*`, since the service role key bypasses row-level security.
