@@ -84,7 +84,7 @@
 			{step}
 			{value}
 			oninput={(e) => set(Number(e.currentTarget.value))}
-			class="w-24 rounded-md border border-gray-300 px-2 py-1 tabular-nums dark:border-gray-700 dark:bg-gray-900"
+			class="w-24 rounded-md border border-gray-300 px-2 py-1 text-gray-900 tabular-nums dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
 		/>
 	</label>
 {/snippet}
@@ -116,7 +116,9 @@
 		<div class="flex flex-wrap items-center gap-5">
 			{@render numberField('Chunk size', targetChars, (v) => (targetChars = v), 100)}
 			{@render numberField('Overlap', overlapChars, (v) => (overlapChars = v), 50)}
-			<span class="text-xs text-gray-500"> Overlap is capped at half the chunk size. </span>
+			<span class="text-xs text-gray-500 dark:text-gray-400">
+				Overlap is capped at half the chunk size.
+			</span>
 		</div>
 	</form>
 
@@ -150,24 +152,28 @@
 					class="mt-4 grid grid-cols-2 gap-x-6 gap-y-2 rounded-md bg-gray-50 p-4 text-sm sm:grid-cols-3 dark:bg-gray-900"
 				>
 					<div>
-						<dt class="inline text-gray-500">chunks</dt>
-						<dd class="inline tabular-nums">{stats.count}</dd>
+						<dt class="inline text-gray-500 dark:text-gray-400">chunks</dt>
+						<dd class="inline text-gray-900 tabular-nums dark:text-gray-100">{stats.count}</dd>
 					</div>
 					<div>
-						<dt class="inline text-gray-500">mean chars</dt>
-						<dd class="inline tabular-nums">{stats.mean}</dd>
+						<dt class="inline text-gray-500 dark:text-gray-400">mean chars</dt>
+						<dd class="inline text-gray-900 tabular-nums dark:text-gray-100">{stats.mean}</dd>
 					</div>
 					<div>
-						<dt class="inline text-gray-500">range</dt>
-						<dd class="inline tabular-nums">{stats.min}–{stats.max}</dd>
+						<dt class="inline text-gray-500 dark:text-gray-400">range</dt>
+						<dd class="inline text-gray-900 tabular-nums dark:text-gray-100">
+							{stats.min}–{stats.max}
+						</dd>
 					</div>
 					<div>
-						<dt class="inline text-gray-500">est. tokens</dt>
-						<dd class="inline tabular-nums">{stats.tokens.toLocaleString()}</dd>
+						<dt class="inline text-gray-500 dark:text-gray-400">est. tokens</dt>
+						<dd class="inline text-gray-900 tabular-nums dark:text-gray-100">
+							{stats.tokens.toLocaleString()}
+						</dd>
 					</div>
 					<div>
-						<dt class="inline text-gray-500">cross-page</dt>
-						<dd class="inline tabular-nums">{stats.spanning}</dd>
+						<dt class="inline text-gray-500 dark:text-gray-400">cross-page</dt>
+						<dd class="inline text-gray-900 tabular-nums dark:text-gray-100">{stats.spanning}</dd>
 					</div>
 				</dl>
 			{/if}
@@ -178,7 +184,7 @@
 						onclick={() => (view = tab)}
 						class="border-b-2 px-3 py-2 text-sm capitalize {view === tab
 							? 'border-blue-600 font-medium text-blue-700 dark:text-blue-400'
-							: 'border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-200'}"
+							: 'border-transparent text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200'}"
 					>
 						{tab}
 					</button>
@@ -190,7 +196,7 @@
 					{#each result.chunks as chunk (chunk.index)}
 						<li class="rounded-md border border-gray-200 dark:border-gray-800">
 							<div
-								class="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-gray-100 px-3 py-2 text-xs text-gray-500 dark:border-gray-800"
+								class="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-gray-100 px-3 py-2 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400"
 							>
 								<span class="font-medium text-gray-700 dark:text-gray-300">#{chunk.index}</span>
 								<span class:font-medium={chunk.pageEnd > chunk.pageStart}>
@@ -222,11 +228,13 @@
 					>
 						Next
 					</button>
-					<span class="ml-auto text-xs text-gray-500">{currentPageText.length} chars</span>
+					<span class="ml-auto text-xs text-gray-500 dark:text-gray-400"
+						>{currentPageText.length} chars</span
+					>
 				</div>
 
 				<pre
-					class="mt-3 max-h-[28rem] overflow-auto rounded-md border border-gray-200 bg-gray-50 p-4 text-xs leading-relaxed whitespace-pre-wrap dark:border-gray-800 dark:bg-gray-900">{currentPageText ||
+					class="mt-3 max-h-[28rem] overflow-auto rounded-md border border-gray-200 bg-gray-50 p-4 text-xs leading-relaxed whitespace-pre-wrap text-gray-900 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100">{currentPageText ||
 						'(no text on this page)'}</pre>
 			{/if}
 		</div>
